@@ -6,3 +6,6 @@ buildimage:
 
 publishimage:
 	docker push zhaoyi0113/es-kinesis-firehose-transform-go
+
+test:
+	echo test
