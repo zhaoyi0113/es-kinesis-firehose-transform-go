@@ -54,6 +54,7 @@ func decodeLogEvent(data string) []map[string]interface{} {
 	result := string(output)
 
 	str := strings.Split(result, "\n")
+	fmt.Println("Split length:", len(str))
 	var events []map[string]interface{}
 	for _, sub := range str {
 		var jsonData map[string]interface{}
