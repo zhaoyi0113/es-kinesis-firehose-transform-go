@@ -2,8 +2,6 @@ FROM golang:1.17-alpine
 
 RUN apk update && apk add ca-certificates openssl make git
 
-RUN apk --no-cache add ca-certificates
-
 ARG cert_location=/usr/local/share/ca-certificates
 
 # Get certificate from "github.com"

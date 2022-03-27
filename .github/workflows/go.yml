@@ -23,3 +23,6 @@ jobs:
 
     - name: Test
       run: make unittest
+
+    - name: BuildImage
+      run: make buildimage
