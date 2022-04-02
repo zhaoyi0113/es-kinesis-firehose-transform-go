@@ -20,6 +20,12 @@ type IndexMapping struct {
 	} `json:"properties"`
 }
 
+type BulkIndex struct {
+	Index struct {
+		Index string `json:"_index"`
+	} `json:"index"`
+}
+
 var client *elasticsearch.Client = nil
 
 func getEsHost() string {
@@ -64,6 +70,14 @@ func CreateIndex(indexName string) {
 	failOnEsError(res)
 }
 
+func BulkInsert(indexName string, docs string) {
+	fmt.Println("Bulk inserts:", docs)
+	res, err := client.Bulk(strings.NewReader(docs), client.Bulk.WithIndex(indexName))
+	failOnEsError(res)
+	FailOnError(err, "Cant insert into ES")
+	fmt.Println("bulk insert res:", res)
+
+}
 func failOnEsError(res *esapi.Response) {
 	if res.IsError() {
 		log.Println(res.String())

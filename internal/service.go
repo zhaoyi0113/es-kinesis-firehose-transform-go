@@ -30,9 +30,9 @@ type LogEvent struct {
 }
 
 type LogDataEvent struct {
-	Id        string `json:"id"`
-	Timestamp string `json:"timestamp"`
-	Message   string `json:"message"`
+	Id        string      `json:"id"`
+	Timestamp json.Number `json:"timestamp"`
+	Message   string      `json:"message"`
 }
 
 type LogData struct {
@@ -50,12 +50,17 @@ type ESDoc struct {
 
 func ProcessLogs(event LogEventRecord, t string) map[string]string {
 	indexName := getIndexName("logs")
+	CreateIndex(indexName)
+	var bulkIndex BulkIndex
+	bulkIndex.Index.Index = indexName
+	bulkIndexStr, _ := json.Marshal(bulkIndex)
+	bulkDocs := ""
 	for _, record := range event.Req.Body.Records {
 		if t == "logs" {
 			logs := decodeLogEvent(record.Data)
 			for _, log := range logs {
 				for _, logEvent := range log.LogEvents {
-					fmt.Println("process log event:", logEvent.Message)
+					fmt.Println("process log event:", logEvent.Id, logEvent.Timestamp)
 					if len(logEvent.Message) > 0 {
 						var jsonData map[string]string
 						err := json.Unmarshal([]byte(logEvent.Message), &jsonData)
@@ -72,14 +77,16 @@ func ProcessLogs(event LogEventRecord, t string) map[string]string {
 						esDoc["logGroup"] = log.LogGroup
 						esDoc["logStream"] = log.LogStream
 						esDoc["id"] = logEvent.Id
-						esDoc["timestamp"] = logEvent.Timestamp
+						esDoc["timestamp"] = string(logEvent.Timestamp)
+						esJsonDoc, _ := json.Marshal(esDoc)
+						bulkDocs += string(bulkIndexStr) + "\n"
+						bulkDocs += string(esJsonDoc) + "\n"
 					}
 				}
 			}
 		}
 	}
-	fmt.Println("create index", indexName)
-	CreateIndex(indexName)
+	BulkInsert(indexName, bulkDocs)
 	return map[string]string{"@message": ""}
 }
 

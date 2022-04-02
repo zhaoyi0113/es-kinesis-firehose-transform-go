@@ -34,7 +34,3 @@ func TestGetIndexName(t *testing.T) {
 	expected := fmt.Sprintf("%s-%s", "aws-logs", now.Format("2006-01-02"))
 	assert.Equal(t, name, expected)
 }
-
-func TestDecodeEvent(t *testing.T) {
-
-}
