@@ -67,7 +67,6 @@ func ProcessLogs(event LogEventRecord, t string) map[string]string {
 						} else {
 							esDoc["@message"] = logEvent.Message
 						}
-						// send to es
 						esDoc["messageType"] = log.MessageType
 						esDoc["owner"] = log.Owner
 						esDoc["logGroup"] = log.LogGroup
