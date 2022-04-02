@@ -8,4 +8,5 @@ publishimage:
 	docker push zhaoyi0113/es-kinesis-firehose-transform-go
 
 unittest:
+	docker-compose up -d
 	go clean -testcache && go test -v ./...
