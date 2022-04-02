@@ -31,7 +31,7 @@ func TestLogProcess(t *testing.T) {
 func TestGetIndexName(t *testing.T) {
 	name := getIndexName("logs")
 	now := time.Now()
-	expected := fmt.Sprintf("%s-%s", "logs", now.Format("2006-01-02"))
+	expected := fmt.Sprintf("%s-%s", "aws-logs", now.Format("2006-01-02"))
 	assert.Equal(t, name, expected)
 }
 

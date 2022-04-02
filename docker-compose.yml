@@ -15,5 +15,5 @@ services:
     ports:
       - 9200:9200
 
-  app:
-    build: .
+  # app:
+  #   build: .
