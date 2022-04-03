@@ -25,10 +25,10 @@ jobs:
       run: make unittest
 
     - name: Publish artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: published-app
-          path: '.'
+      uses: actions/upload-artifact@v2
+      with:
+        name: published-app
+        path: '.'
 
   build-image:
     runs-on: ubuntu-latest
