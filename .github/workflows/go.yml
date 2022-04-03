@@ -24,5 +24,24 @@ jobs:
     - name: Test
       run: make unittest
 
-    - name: BuildImage
-      run: make buildimage
+    - name: Publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: published-app
+          path: '.'
+
+  build-image:
+    runs-on: ubuntu-latest
+    environment: 'prod'
+    needs: [build]
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: published-app
+          path: './'
+
+      - name: BuildImage
+        run: make buildimage
+
+  
