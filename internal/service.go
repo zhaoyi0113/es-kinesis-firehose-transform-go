@@ -16,9 +16,7 @@ func Ping() string {
 }
 
 type LogEventRecord struct {
-	Req struct {
-		Body LogEvent `json:"body"`
-	} `json:"req"`
+	Body LogEvent `json:"body"`
 }
 
 type LogEvent struct {
@@ -48,15 +46,21 @@ type ESDoc struct {
 	Message string `json:"@message"`
 }
 
-func ProcessLogs(event LogEventRecord, t string) map[string]string {
+type Response struct {
+	Version     string `json:"X-Amz-Firehose-Protocol-Version"`
+	RequestId   string `json:"X-Amz-Firehose-Request-Id"`
+	ContentType string `json:"Content-Type"`
+}
+
+func ProcessLogs(event LogEventRecord, eventType string) Response {
 	indexName := getIndexName("logs")
 	CreateIndex(indexName)
 	var bulkIndex BulkIndex
 	bulkIndex.Index.Index = indexName
 	bulkIndexStr, _ := json.Marshal(bulkIndex)
 	bulkDocs := ""
-	for _, record := range event.Req.Body.Records {
-		if t == "logs" {
+	for _, record := range event.Body.Records {
+		if eventType == "logs" {
 			logs := decodeLogEvent(record.Data)
 			for _, log := range logs {
 				for _, logEvent := range log.LogEvents {
@@ -87,7 +91,11 @@ func ProcessLogs(event LogEventRecord, t string) map[string]string {
 		}
 	}
 	BulkInsert(indexName, bulkDocs)
-	return map[string]string{"@message": ""}
+	var response Response
+	response.ContentType = "application/json"
+	response.Version = "1.0"
+	response.RequestId = event.Body.RequestId
+	return response
 }
 
 func getIndexName(indexType string) string {

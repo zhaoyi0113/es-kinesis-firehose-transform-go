@@ -1,6 +1,10 @@
 package api
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/zhaoyi0113/es-kinesis-firehose-transform-go/internal"
 )
@@ -14,7 +18,12 @@ func CreateRoute() *gin.Engine {
 		})
 	})
 	r.POST("/logs", func(c *gin.Context) {
-
+		jsonData, err := ioutil.ReadAll(c.Request.Body)
+		internal.FailOnError(err, "Failed to parse request body")
+		var record internal.LogEventRecord
+		json.Unmarshal(jsonData, &record)
+		response := internal.ProcessLogs(record, "logs")
+		c.IndentedJSON(http.StatusOK, response)
 	})
 	return r
 }

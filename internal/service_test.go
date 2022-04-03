@@ -19,11 +19,8 @@ func TestLogProcess(t *testing.T) {
 	FailOnError(err, "Cant parse log test data")
 
 	for _, logEvent := range logEvents {
-		record := LogEventRecord{
-			Req: struct {
-				Body LogEvent `json:"body"`
-			}{Body: logEvent},
-		}
+		var record LogEventRecord
+		record.Body = logEvent
 		ProcessLogs(record, "logs")
 	}
 }
