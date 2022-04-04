@@ -114,7 +114,6 @@ func decodeLogEvent(data string) []LogData {
 	result := string(output)
 
 	str := strings.Split(result, "\n")
-	fmt.Println("Original:", str)
 	var events []LogData
 	for _, sub := range str {
 		var logData LogData
