@@ -7,7 +7,8 @@ buildimage:
 publishimage:
 	docker push zhaoyi0113/es-kinesis-firehose-transform-go
 
-unittest:
+startes:
 	docker-compose up -d --build
-	sleep 30
+
+unittest:
 	go clean -testcache && go test -v ./...

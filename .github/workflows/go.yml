@@ -22,7 +22,10 @@ jobs:
       run: make build
 
     - name: Test
-      run: make unittest
+      run: |
+        make startes
+        sleep 120
+        make unittest
 
     - name: Publish artifact
       uses: actions/upload-artifact@v2
