@@ -17,12 +17,22 @@ func CreateRoute() *gin.Engine {
 			"message": message,
 		})
 	})
+
 	r.POST("/logs", func(c *gin.Context) {
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		internal.FailOnError(err, "Failed to parse request body")
 		var record internal.LogEventRecord
 		json.Unmarshal(jsonData, &record)
 		response := internal.ProcessLogs(record, "logs")
+		c.IndentedJSON(http.StatusOK, response)
+	})
+
+	r.POST("/metrics", func(c *gin.Context) {
+		jsonData, err := ioutil.ReadAll(c.Request.Body)
+		internal.FailOnError(err, "Failed to parse request body")
+		var record internal.LogEventRecord
+		json.Unmarshal(jsonData, &record)
+		response := internal.ProcessLogs(record, "metrics")
 		c.IndentedJSON(http.StatusOK, response)
 	})
 	return r

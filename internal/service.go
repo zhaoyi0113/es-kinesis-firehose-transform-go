@@ -53,7 +53,7 @@ type Response struct {
 }
 
 func ProcessLogs(event LogEventRecord, eventType string) Response {
-	indexName := getIndexName("logs")
+	indexName := getIndexName(eventType)
 	CreateIndex(indexName)
 	var bulkIndex BulkIndex
 	bulkIndex.Index.Index = indexName
