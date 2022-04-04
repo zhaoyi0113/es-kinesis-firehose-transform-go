@@ -36,7 +36,7 @@ func getEsHost() string {
 	return esHost
 }
 
-func createESClient() *elasticsearch.Client {
+func CreateESClient() *elasticsearch.Client {
 	esHost := getEsHost()
 	cfg := elasticsearch.Config{
 		Addresses: []string{
@@ -50,7 +50,7 @@ func createESClient() *elasticsearch.Client {
 
 func CreateIndex(indexName string) {
 	if client == nil {
-		client = createESClient()
+		client = CreateESClient()
 	}
 	res, err := client.Indices.Exists([]string{indexName})
 	if err != nil || res.StatusCode == 200 {
