@@ -16,8 +16,6 @@ import (
 //go:embed testData/logTestData.json
 var logTestData string
 
-var es = CreateESClient()
-
 func TestLogProcess(t *testing.T) {
 	var logEvents []LogEvent
 	err := json.Unmarshal([]byte(logTestData), &logEvents)
@@ -28,6 +26,7 @@ func TestLogProcess(t *testing.T) {
 	response := ProcessLogs(record, "logs")
 	assert.Equal(t, response.RequestId, logEvents[0].RequestId)
 
+	time.Sleep(20 * time.Second)
 	var buf bytes.Buffer
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -37,6 +36,7 @@ func TestLogProcess(t *testing.T) {
 		},
 	}
 	json.NewEncoder(&buf).Encode(query)
+	var es = CreateESClient()
 	res, err := es.Search(
 		es.Search.WithContext(context.Background()),
 		es.Search.WithIndex(getIndexName("logs")),

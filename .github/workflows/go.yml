@@ -24,7 +24,7 @@ jobs:
     - name: Test
       run: |
         make startes
-        sleep 120
+        sleep 20
         make unittest
 
     - name: Publish artifact
