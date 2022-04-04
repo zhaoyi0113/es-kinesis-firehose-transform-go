@@ -9,5 +9,5 @@ publishimage:
 
 unittest:
 	docker-compose up -d --build
-	sleep 10
+	sleep 30
 	go clean -testcache && go test -v ./...

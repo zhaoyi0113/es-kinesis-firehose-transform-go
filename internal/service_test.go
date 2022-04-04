@@ -47,6 +47,7 @@ func TestLogProcess(t *testing.T) {
 	defer res.Body.Close()
 	var r map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&r)
+	fmt.Println("Get es response:", r)
 	hits := r["hits"]
 	total := hits.(map[string]interface{})["total"]
 	valueStr := total.(map[string]interface{})["value"]
