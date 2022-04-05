@@ -26,7 +26,7 @@ func TestLogProcess(t *testing.T) {
 	response := ProcessLogs(record, "logs")
 	assert.Equal(t, response.RequestId, logEvents[0].RequestId)
 
-	time.Sleep(20 * time.Second)
+	time.Sleep(2 * time.Second)
 	var buf bytes.Buffer
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
