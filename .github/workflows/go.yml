@@ -33,7 +33,7 @@ jobs:
         name: published-app
         path: '.'
 
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     environment: 'prod'
     needs: [build]
