@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -19,6 +20,7 @@ func CreateRoute() *gin.Engine {
 	})
 
 	r.POST("/logs", func(c *gin.Context) {
+		fmt.Println("receiev logs", c.Request)
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		internal.FailOnError(err, "Failed to parse request body")
 		var record internal.LogEventRecord
