@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 	"time"
 )
@@ -52,14 +53,15 @@ type Response struct {
 	ContentType string `json:"Content-Type"`
 }
 
-func ProcessLogs(event LogEventRecord, eventType string) Response {
+func ProcessLogs(event LogEvent, eventType string) Response {
+	fmt.Println("process event:", event)
 	indexName := getIndexName(eventType)
 	CreateIndex(indexName)
 	var bulkIndex BulkIndex
 	bulkIndex.Index.Index = indexName
 	bulkIndexStr, _ := json.Marshal(bulkIndex)
 	bulkDocs := ""
-	for _, record := range event.Body.Records {
+	for _, record := range event.Records {
 		if eventType == "logs" {
 			logs := decodeLogEvent(record.Data)
 			for _, log := range logs {
@@ -90,11 +92,15 @@ func ProcessLogs(event LogEventRecord, eventType string) Response {
 			}
 		}
 	}
-	BulkInsert(indexName, bulkDocs)
+	if len(bulkDocs) > 0 {
+		BulkInsert(indexName, bulkDocs)
+	} else {
+		log.Println("Not docs found for this event")
+	}
 	var response Response
 	response.ContentType = "application/json"
 	response.Version = "1.0"
-	response.RequestId = event.Body.RequestId
+	response.RequestId = event.RequestId
 	return response
 }
 

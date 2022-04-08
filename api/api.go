@@ -20,10 +20,10 @@ func CreateRoute() *gin.Engine {
 	})
 
 	r.POST("/logs", func(c *gin.Context) {
-		fmt.Println("receiev logs", c.Request)
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
+		fmt.Println("log json:", string(jsonData))
 		internal.FailOnError(err, "Failed to parse request body")
-		var record internal.LogEventRecord
+		var record internal.LogEvent
 		json.Unmarshal(jsonData, &record)
 		response := internal.ProcessLogs(record, "logs")
 		c.IndentedJSON(http.StatusOK, response)

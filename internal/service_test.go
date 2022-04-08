@@ -21,8 +21,7 @@ func TestLogProcess(t *testing.T) {
 	err := json.Unmarshal([]byte(logTestData), &logEvents)
 	FailOnError(err, "Cant parse log test data")
 
-	var record LogEventRecord
-	record.Body = logEvents[0]
+	var record LogEvent = logEvents[0]
 	response := ProcessLogs(record, "logs")
 	assert.Equal(t, response.RequestId, logEvents[0].RequestId)
 
