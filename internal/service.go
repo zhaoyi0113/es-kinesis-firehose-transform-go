@@ -73,14 +73,22 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						if err != nil {
 							esDoc["@message"] = logEvent.Message
 						} else if v, found := jsonData["@message"]; found {
-							fmt.Println("xxxxx:", v)
-							esDoc["@message"] = v
-							esDoc["@componentName"] = jsonData["@componentName"]
-							esDoc["@partName"] = jsonData["@partName"]
-							esDoc["@region"] = jsonData["@region"]
-							esDoc["@lambdaName"] = jsonData["@lambdaName"]
-							esDoc["@level"] = jsonData["@level"]
-							esDoc["@aggregateId"] = jsonData["@aggregateId"]
+							var messageJsonData map[string]string
+							err = json.Unmarshal([]byte(v), &messageJsonData)
+							docJsonData := jsonData
+							if err == nil {
+								_, exist := docJsonData["@message"]
+								if exist {
+									docJsonData = messageJsonData
+								}
+							}
+							esDoc["@message"] = docJsonData["@message"]
+							esDoc["@componentName"] = docJsonData["@componentName"]
+							esDoc["@partName"] = docJsonData["@partName"]
+							esDoc["@region"] = docJsonData["@region"]
+							esDoc["@lambdaName"] = docJsonData["@lambdaName"]
+							esDoc["@level"] = docJsonData["@level"]
+							esDoc["@aggregateId"] = docJsonData["@aggregateId"]
 						} else {
 							esDoc["@message"] = logEvent.Message
 						}
