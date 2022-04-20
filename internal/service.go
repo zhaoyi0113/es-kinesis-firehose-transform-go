@@ -70,11 +70,17 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 					if len(logEvent.Message) > 0 {
 						var jsonData map[string]string
 						err := json.Unmarshal([]byte(logEvent.Message), &jsonData)
-						esDoc := make(map[string]string)
+						esDoc := make(map[string]interface{})
 						if err != nil {
 							esDoc["@message"] = logEvent.Message
 						} else if v, found := jsonData["@message"]; found {
-							esDoc["@message"] = v
+							var messageJsonData map[string]string
+							err = json.Unmarshal([]byte(jsonData["@message"]), &messageJsonData)
+							if err != nil {
+								esDoc["@message"] = v
+							} else {
+								esDoc["@message"] = messageJsonData
+							}
 						} else {
 							esDoc["@message"] = logEvent.Message
 						}
