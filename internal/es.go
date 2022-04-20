@@ -71,12 +71,11 @@ func CreateIndex(indexName string) {
 }
 
 func BulkInsert(indexName string, docs string) {
-	fmt.Println("Bulk inserts:", docs)
+	// fmt.Println("Bulk inserts:", docs)
 	res, err := client.Bulk(strings.NewReader(docs), client.Bulk.WithIndex(indexName))
 	failOnEsError(res)
 	FailOnError(err, "Cant insert into ES")
-	fmt.Println("bulk insert res:", res)
-
+	// fmt.Println("bulk insert res:", res)
 }
 func failOnEsError(res *esapi.Response) {
 	if res.IsError() {

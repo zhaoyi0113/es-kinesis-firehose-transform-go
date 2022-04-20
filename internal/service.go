@@ -54,7 +54,6 @@ type Response struct {
 }
 
 func ProcessLogs(event LogEvent, eventType string) Response {
-	fmt.Println("process event:", event)
 	indexName := getIndexName(eventType)
 	CreateIndex(indexName)
 	var bulkIndex BulkIndex
@@ -74,19 +73,14 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						if err != nil {
 							esDoc["@message"] = logEvent.Message
 						} else if v, found := jsonData["@message"]; found {
-							var messageJsonData map[string]string
-							err = json.Unmarshal([]byte(jsonData["@message"]), &messageJsonData)
-							if err != nil {
-								esDoc["@message"] = v
-							} else {
-								esDoc["@message"] = messageJsonData["@message"]
-								esDoc["@componentName"] = messageJsonData["@componentName"]
-								esDoc["@partName"] = messageJsonData["@partName"]
-								esDoc["@region"] = messageJsonData["@region"]
-								esDoc["@lambdaName"] = messageJsonData["@lambdaName"]
-								esDoc["@level"] = messageJsonData["@level"]
-								esDoc["@aggregateId"] = messageJsonData["@aggregateId"]
-							}
+							fmt.Println("xxxxx:", v)
+							esDoc["@message"] = v
+							esDoc["@componentName"] = jsonData["@componentName"]
+							esDoc["@partName"] = jsonData["@partName"]
+							esDoc["@region"] = jsonData["@region"]
+							esDoc["@lambdaName"] = jsonData["@lambdaName"]
+							esDoc["@level"] = jsonData["@level"]
+							esDoc["@aggregateId"] = jsonData["@aggregateId"]
 						} else {
 							esDoc["@message"] = logEvent.Message
 						}
