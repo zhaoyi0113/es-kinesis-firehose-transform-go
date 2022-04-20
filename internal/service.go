@@ -73,22 +73,13 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						if err != nil {
 							esDoc["@message"] = logEvent.Message
 						} else if v, found := jsonData["@message"]; found {
-							var messageJsonData map[string]string
-							err = json.Unmarshal([]byte(v), &messageJsonData)
-							docJsonData := jsonData
-							if err == nil {
-								_, exist := docJsonData["@message"]
-								if exist {
-									docJsonData = messageJsonData
-								}
-							}
-							esDoc["@message"] = docJsonData["@message"]
-							esDoc["@componentName"] = docJsonData["@componentName"]
-							esDoc["@partName"] = docJsonData["@partName"]
-							esDoc["@region"] = docJsonData["@region"]
-							esDoc["@lambdaName"] = docJsonData["@lambdaName"]
-							esDoc["@level"] = docJsonData["@level"]
-							esDoc["@aggregateId"] = docJsonData["@aggregateId"]
+							esDoc["@message"] = v
+							esDoc["@componentName"] = jsonData["@componentName"]
+							esDoc["@partName"] = jsonData["@partName"]
+							esDoc["@region"] = jsonData["@region"]
+							esDoc["@lambdaName"] = jsonData["@lambdaName"]
+							esDoc["@level"] = jsonData["@level"]
+							esDoc["@aggregateId"] = jsonData["@aggregateId"]
 						} else {
 							esDoc["@message"] = logEvent.Message
 						}
@@ -98,6 +89,24 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						esDoc["logStream"] = log.LogStream
 						esDoc["id"] = logEvent.Id
 						esDoc["timestamp"] = string(logEvent.Timestamp)
+
+						var messageJsonData map[string]interface{}
+						str := fmt.Sprintf("%v", esDoc["@message"])
+						err = json.Unmarshal([]byte(str), &messageJsonData)
+
+						if err == nil {
+							v, exist := messageJsonData["@message"]
+							if exist {
+								esDoc["@message"] = v
+								esDoc["@componentName"] = messageJsonData["@componentName"]
+								esDoc["@partName"] = messageJsonData["@partName"]
+								esDoc["@region"] = messageJsonData["@region"]
+								esDoc["@lambdaName"] = messageJsonData["@lambdaName"]
+								esDoc["@level"] = messageJsonData["@level"]
+								esDoc["@aggregateId"] = messageJsonData["@aggregateId"]
+							}
+						}
+
 						esJsonDoc, _ := json.Marshal(esDoc)
 						bulkDocs += string(bulkIndexStr) + "\n"
 						bulkDocs += string(esJsonDoc) + "\n"
