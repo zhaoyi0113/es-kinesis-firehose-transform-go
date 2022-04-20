@@ -79,7 +79,13 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 							if err != nil {
 								esDoc["@message"] = v
 							} else {
-								esDoc["@message"] = messageJsonData
+								esDoc["@message"] = messageJsonData["@message"]
+								esDoc["@componentName"] = messageJsonData["@componentName"]
+								esDoc["@partName"] = messageJsonData["@partName"]
+								esDoc["@region"] = messageJsonData["@region"]
+								esDoc["@lambdaName"] = messageJsonData["@lambdaName"]
+								esDoc["@level"] = messageJsonData["@level"]
+								esDoc["@aggregateId"] = messageJsonData["@aggregateId"]
 							}
 						} else {
 							esDoc["@message"] = logEvent.Message
