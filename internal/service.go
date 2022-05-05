@@ -82,6 +82,7 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 							esDoc["@aggregateId"] = jsonData["@aggregateId"]
 							esDoc["@requestId"] = jsonData["@requestId"]
 							esDoc["@stage"] = jsonData["@stage"]
+							esDoc["level"] = jsonData["level"]
 						} else {
 							esDoc["@message"] = logEvent.Message
 						}
@@ -108,6 +109,7 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 								esDoc["@aggregateId"] = messageJsonData["@aggregateId"]
 								esDoc["@requestId"] = messageJsonData["@requestId"]
 								esDoc["@stage"] = messageJsonData["@stage"]
+								esDoc["level"] = messageJsonData["level"]
 							}
 						}
 
