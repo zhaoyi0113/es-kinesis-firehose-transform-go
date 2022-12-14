@@ -29,6 +29,12 @@ func CreateRoute() *gin.Engine {
 		c.IndentedJSON(http.StatusOK, response)
 	})
 
+	r.POST("/traces", func(c *gin.Context) {
+		fmt.Println("Get trace")
+		jsonData, _ := ioutil.ReadAll(c.Request.Body)
+		fmt.Println("trace json:", string(jsonData))
+	}
+
 	r.POST("/metrics", func(c *gin.Context) {
 		// jsonData, err := ioutil.ReadAll(c.Request.Body)
 		// internal.FailOnError(err, "Failed to parse request body")
