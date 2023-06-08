@@ -34,7 +34,7 @@ func CreateRoute() *gin.Engine {
 		fmt.Println("Get trace")
 		jsonData, _ := ioutil.ReadAll(c.Request.Body)
 		fmt.Println("trace json:", string(jsonData))
-	}
+	})
 
 	r.POST("/metrics", func(c *gin.Context) {
 		// jsonData, err := ioutil.ReadAll(c.Request.Body)
