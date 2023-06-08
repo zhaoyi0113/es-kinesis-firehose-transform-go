@@ -65,7 +65,7 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 			logs := decodeLogEvent(record.Data)
 			for _, log := range logs {
 				for _, logEvent := range log.LogEvents {
-					fmt.Println("process log event:", logEvent.Id, logEvent.Timestamp)
+					// fmt.Println("process log event:", logEvent.Id, logEvent.Timestamp)
 					if len(logEvent.Message) > 0 {
 						var jsonData map[string]string
 						err := json.Unmarshal([]byte(logEvent.Message), &jsonData)
