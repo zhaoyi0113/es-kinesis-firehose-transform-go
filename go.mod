@@ -3,14 +3,14 @@ module github.com/zhaoyi0113/es-kinesis-firehose-transform-go
 go 1.17
 
 require (
-	github.com/elastic/go-elasticsearch/v8 v8.1.0
+	github.com/elastic/go-elasticsearch/v8 v8.8.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/stretchr/testify v1.7.1
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/elastic/elastic-transport-go/v8 v8.1.0 // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.3.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect

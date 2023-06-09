@@ -54,6 +54,7 @@ type Response struct {
 }
 
 func ProcessLogs(event LogEvent, eventType string) Response {
+
 	indexName := getIndexName(eventType)
 	CreateIndex(indexName)
 	var bulkIndex BulkIndex
@@ -65,7 +66,6 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 			logs := decodeLogEvent(record.Data)
 			for _, log := range logs {
 				for _, logEvent := range log.LogEvents {
-					// fmt.Println("process log event:", logEvent.Id, logEvent.Timestamp)
 					if len(logEvent.Message) > 0 {
 						var jsonData map[string]string
 						err := json.Unmarshal([]byte(logEvent.Message), &jsonData)
@@ -92,7 +92,6 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						esDoc["logStream"] = log.LogStream
 						esDoc["id"] = logEvent.Id
 						esDoc["timestamp"] = string(logEvent.Timestamp)
-
 						var messageJsonData map[string]interface{}
 						str := fmt.Sprintf("%v", esDoc["@message"])
 						err = json.Unmarshal([]byte(str), &messageJsonData)
