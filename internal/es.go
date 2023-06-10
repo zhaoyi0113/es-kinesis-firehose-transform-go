@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 
@@ -71,9 +72,13 @@ func CreateIndex(indexName string) {
 }
 
 func BulkInsert(indexName string, docs string) {
-	res, err := client.Bulk(strings.NewReader(docs), client.Bulk.WithIndex(indexName))
-	failOnEsError(res)
+	// res, err := client.Bulk(strings.NewReader(docs), client.Bulk.WithIndex(indexName))
+	d := strings.NewReader(docs)
+	resp, err := http.Post(fmt.Sprintf("%s/_bulk", getEsHost()), "application/json", d)
+	// failOnEsError(res)
 	FailOnError(err, "Cant insert into ES")
+	defer resp.Body.Close()
+
 }
 func failOnEsError(res *esapi.Response) {
 	if res.IsError() {

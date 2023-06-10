@@ -1,6 +1,8 @@
 package main
 
-import "github.com/zhaoyi0113/es-kinesis-firehose-transform-go/api"
+import (
+	"github.com/zhaoyi0113/es-kinesis-firehose-transform-go/api"
+)
 
 type album struct {
 	ID     string  `json:"id"`
