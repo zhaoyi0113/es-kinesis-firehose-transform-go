@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/signal"
 	"runtime/pprof"
-	"time"
 
 	"github.com/zhaoyi0113/es-kinesis-firehose-transform-go/api"
 )
@@ -34,11 +33,6 @@ func main() {
 		route := api.CreateRoute()
 		route.Run()
 	}()
-
-	select {
-	case <-time.After(120 * time.Second):
-		pprof.StopCPUProfile()
-	}
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)

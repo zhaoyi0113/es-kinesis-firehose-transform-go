@@ -38,8 +38,6 @@ func CreateRoute() *gin.Engine {
 		fmt.Println("v1 receive log event")
 		PrintMemUsage()
 
-		f, _ := os.Create("memoryProfile.tar.gz")
-		pprof.WriteHeapProfile(f)
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		internal.FailOnError(err, "Failed to parse request body")
 		var record internal.LogEvent
@@ -64,4 +62,9 @@ func CreateRoute() *gin.Engine {
 		// c.IndentedJSON(http.StatusOK, response)
 	})
 	return r
+}
+
+func profileMemory() {
+	f, _ := os.Create("memoryProfile.tar.gz")
+	pprof.WriteHeapProfile(f)
 }
