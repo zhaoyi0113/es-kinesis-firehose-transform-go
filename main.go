@@ -1,6 +1,12 @@
 package main
 
 import (
+	"log"
+	"os"
+	"os/signal"
+	"runtime/pprof"
+	"time"
+
 	"github.com/zhaoyi0113/es-kinesis-firehose-transform-go/api"
 )
 
@@ -18,6 +24,24 @@ var albums = []album{
 }
 
 func main() {
-	route := api.CreateRoute()
-	route.Run()
+	defer pprof.StopCPUProfile()
+	f, err := os.Create("./profile.tar.gz")
+	if err != nil {
+		log.Fatal(err)
+	}
+	pprof.StartCPUProfile(f)
+	go func() {
+		route := api.CreateRoute()
+		route.Run()
+	}()
+
+	select {
+	case <-time.After(120 * time.Second):
+		pprof.StopCPUProfile()
+	}
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	log.Println("Shutdown Server ...")
 }
