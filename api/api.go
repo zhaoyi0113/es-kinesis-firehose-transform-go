@@ -33,7 +33,7 @@ func CreateRoute() *gin.Engine {
 	})
 
 	r.POST("/logs", func(c *gin.Context) {
-		fmt.Println("receive log event")
+		fmt.Println("v1 receive log event")
 		PrintMemUsage()
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		internal.FailOnError(err, "Failed to parse request body")
