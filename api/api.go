@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"runtime"
+	"runtime/pprof"
 
 	"github.com/gin-gonic/gin"
 	"github.com/zhaoyi0113/es-kinesis-firehose-transform-go/internal"
@@ -35,6 +37,9 @@ func CreateRoute() *gin.Engine {
 	r.POST("/logs", func(c *gin.Context) {
 		fmt.Println("v1 receive log event")
 		PrintMemUsage()
+
+		f, _ := os.Create("memoryProfile.tar.gz")
+		pprof.WriteHeapProfile(f)
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		internal.FailOnError(err, "Failed to parse request body")
 		var record internal.LogEvent
