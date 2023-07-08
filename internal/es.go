@@ -54,11 +54,13 @@ func CreateIndex(indexName string) {
 		client = CreateESClient()
 	}
 	res, err := client.Indices.Exists([]string{indexName})
+	defer res.Body.Close()
 	if err != nil || res.StatusCode == 200 {
 		FailOnError(err, "Failed to check index exists")
 		return
 	}
 	res, err = client.Indices.Create(indexName)
+	defer res.Body.Close()
 	FailOnError(err, "Failed to create index "+indexName)
 	failOnEsError(res)
 	fmt.Println("Create index success:" + indexName)
