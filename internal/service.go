@@ -92,6 +92,7 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						esDoc["logStream"] = log.LogStream
 						esDoc["id"] = logEvent.Id
 						esDoc["timestamp"] = string(logEvent.Timestamp)
+						esDoc["timestampText"] = string(logEvent.Timestamp)
 						var messageJsonData map[string]interface{}
 						str := fmt.Sprintf("%v", esDoc["@message"])
 						err = json.Unmarshal([]byte(str), &messageJsonData)
