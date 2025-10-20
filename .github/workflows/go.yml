@@ -28,7 +28,7 @@ jobs:
         make unittest
 
     - name: Publish artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: published-app
         path: '.'
