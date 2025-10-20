@@ -20,6 +20,8 @@ jobs:
 
     - name: Install docker compose
       uses: KengoTODA/actions-setup-docker-compose@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         version: 'latest'
 
