@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -67,8 +66,14 @@ func CreateIndex(indexName string) {
 	var mapping IndexMapping
 	mapping.Properties.Timestamp.Type = "date"
 
-	mappingJson, _ := json.Marshal(mapping)
-	res, err = client.Indices.PutMapping([]string{indexName}, strings.NewReader(string(mappingJson)))
+	mappingJsonStr := `{
+		"properties": {
+			"timestamp": { "type": "date" },
+			"timestampText": { "type": "text" }
+		}
+	}`
+
+	res, err = client.Indices.PutMapping([]string{indexName}, strings.NewReader(string(mappingJsonStr)))
 	FailOnError(err, "Failed to update index mapping")
 	failOnEsError(res)
 }
