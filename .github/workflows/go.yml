@@ -19,7 +19,9 @@ jobs:
         go-version: 1.17
 
     - name: Install docker compose
-      uses: docker/setup-compose-action@v1
+      uses: KengoTODA/actions-setup-docker-compose@v1
+      with:
+        version: 'latest'
 
     - name: Build
       run: make build
