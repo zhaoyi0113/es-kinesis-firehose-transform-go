@@ -60,7 +60,7 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 	var bulkIndex BulkIndex
 	bulkIndex.Index.Index = indexName
 	bulkIndexStr, _ := json.Marshal(bulkIndex)
-	bulkDocs := ""
+	var bulkDocs bytes.Buffer
 	for _, record := range event.Records {
 		if eventType == "logs" {
 			logs := decodeLogEvent(record.Data)
@@ -113,8 +113,10 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 						}
 
 						esJsonDoc, _ := json.Marshal(esDoc)
-						bulkDocs += string(bulkIndexStr) + "\n"
-						bulkDocs += string(esJsonDoc) + "\n"
+						bulkDocs.Write(bulkIndexStr)
+						bulkDocs.WriteString("\n")
+						bulkDocs.Write(esJsonDoc)
+						bulkDocs.WriteString("\n")
 					}
 				}
 			}
