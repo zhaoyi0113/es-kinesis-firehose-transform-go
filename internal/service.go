@@ -6,7 +6,7 @@ import (
 	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"strings"
 	"time"
@@ -143,9 +143,10 @@ func decodeLogEvent(data string) []LogData {
 	reader := bytes.NewReader([]byte(decoded))
 	gzreader, err := gzip.NewReader(reader)
 	FailOnError(err, "Cant unzip data")
-	output, err := ioutil.ReadAll(gzreader)
+	output, err := io.ReadAll(gzreader)
 	FailOnError(err, "Cant unzip data")
 	result := string(output)
+	gzreader.Close()
 
 	str := strings.Split(result, "\n")
 	var events []LogData
