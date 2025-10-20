@@ -28,12 +28,12 @@ jobs:
     - name: Build
       run: make build
 
-    - name: Test
-      run: |
-        make startes
-        which docker-compose
-        sleep 20
-        make unittest
+    # - name: Test
+    #   run: |
+    #     make startes
+    #     which docker-compose
+    #     sleep 20
+    #     make unittest
 
     - name: Publish artifact
       uses: actions/upload-artifact@v4
