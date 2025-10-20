@@ -122,8 +122,8 @@ func ProcessLogs(event LogEvent, eventType string) Response {
 			}
 		}
 	}
-	if len(bulkDocs) > 0 {
-		BulkInsert(indexName, bulkDocs)
+	if bulkDocs.Len() > 0 {
+		BulkInsert(indexName, bulkDocs.String())
 	} else {
 		log.Println("Not docs found for this event")
 	}
