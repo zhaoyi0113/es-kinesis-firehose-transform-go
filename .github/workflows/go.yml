@@ -27,6 +27,7 @@ jobs:
     - name: Test
       run: |
         make startes
+        which docker-compose
         sleep 20
         make unittest
 
